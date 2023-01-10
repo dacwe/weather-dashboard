@@ -2,8 +2,10 @@
 
 A simple weather dashboard for weatherunderground/api.weather.com for PWS.
 
-Start with 
+Intall/start with:
 
+    git clone https://github.com/dacwe/weather-dashboard.git
+    cd weather-dashboard
     npm install
     npm run start
 
