@@ -2,6 +2,8 @@
 
 A simple weather dashboard for weatherunderground/api.weather.com for PWS.
 
+![Screenshot](screenshot.png)
+
 Intall/start with:
 
     git clone https://github.com/dacwe/weather-dashboard.git
@@ -13,7 +15,4 @@ Browse to:
 
     http://localhost:7775/?apiKey=<your-api-key>&stationId=<your-station-id>&numericPrecision=decimal&format=json&units=m
 
-Screenshot:
-
-![Screenshot](screenshot.png)
 
