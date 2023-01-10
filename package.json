@@ -1,0 +1,19 @@
+{
+  "name": "chartjs-example",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "parcel src/index.html src/chart.js --port 7775",
+    "build": "parcel build src/index.html"
+  },
+  "devDependencies": {
+    "chartjs-adapter-moment": "^1.0.1",
+    "moment": "^2.29.4",
+    "parcel": "^2.6.2",
+    "parcel-reporter-static-files-copy": "^1.5.0"
+  },
+  "dependencies": {
+    "@cubejs-client/core": "^0.31.0",
+    "chart.js": "^4.0.0"
+  }
+}
