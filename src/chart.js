@@ -1,9 +1,8 @@
 import Chart from 'chart.js/auto'
 import 'chartjs-adapter-moment';
 
-(async function() {
-    
-    const data = await fetch("https://api.weather.com/v2/pws/observations/all/1day" + window.location.search)
+async function fetchData(url, date) {
+    return await fetch(url + "&date=" + new Date(date - date.getTimezoneOffset()*60000).toISOString().slice(0, 10).replaceAll("-", ""))
 	  .then(response => {
               if (!response.ok) {
 		  throw new Error(`HTTP error ${response.status}`);
@@ -11,8 +10,21 @@ import 'chartjs-adapter-moment';
 
               return response.json();
 	  });
+}
 
-    const observations = data.observations;
+(async function() {
+    const today = new Date();
+    var yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    
+    let observations = [];
+    const url = "https://api.weather.com/v2/pws/history/all" + window.location.search;
+    observations.push(...(await fetchData(url, yesterday)).observations);
+    observations.push(...(await fetchData(url, today)).observations);
+    observations = observations.filter(obs => {
+	return today - new Date(obs.obsTimeLocal) < 24 * 60 * 60 * 1000;
+    })
+    
     const last = observations.at(-1);
     console.log(observations)
     new Chart(
