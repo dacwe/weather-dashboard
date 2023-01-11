@@ -55,25 +55,6 @@ const windChart = new Chart(
 	data: {
 	    datasets: [
 		{
-                    label: "Low",
-		    showLabel: false,
-		    showLine: false,
-		    pointStyle: false,
-		    cubicInterpolationMode: 'monotone',
-		    backgroundColor: 'rgba(255,255,255, 0.1)',
-		    fill: false,
-                    data: []
-                },
-		{
-                    label: "High",
-		    showLine: false,
-		    pointStyle: false,
-		    cubicInterpolationMode: 'monotone',
-                    backgroundColor: 'rgba(255,255,255, 0.1)',
-		    fill: '-1',
-                    data: []
-                },
-		{
                     label: "Average",
 		    pointStyle: false,
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
@@ -208,7 +189,9 @@ const solarChart = new Chart(
 );
 
 const allCharts = [tempChart, windChart, precipChart, solarChart];
-				
+
+var firstUpdate = true;
+
 function updateChart(observations) {
     
     console.log(observations);
@@ -216,18 +199,16 @@ function updateChart(observations) {
     // adds new observations
     observations.map(obs => {
 	const time = new Date(obs.obsTimeUtc)
-	tempChart.data.datasets[0].data.push({ x: time, y: obs.metric.tempAvg });
-	tempChart.data.datasets[1].data.push({ x: time, y: obs.metric.windchillAvg });
+	tempChart.data.datasets[0].data.push({ x: time, y: obs.metric.tempAvg || obs.metric.temp || 0 });
+	tempChart.data.datasets[1].data.push({ x: time, y: obs.metric.windchillAvg || obs.metric.windChill || 0 });
 
-    	windChart.data.datasets[0].data.push({ x: time, y: obs.metric.windspeedLow });
-	windChart.data.datasets[1].data.push({ x: time, y: obs.metric.windspeedHigh });
-	windChart.data.datasets[2].data.push({ x: time, y: obs.metric.windspeedAvg });
-	windChart.data.datasets[3].data.push({ x: time, y: obs.metric.windgustAvg });
+	windChart.data.datasets[0].data.push({ x: time, y: obs.metric.windspeedAvg || obs.metric.windSpeed || 0});
+	windChart.data.datasets[1].data.push({ x: time, y: obs.metric.windgustAvg || obs.metric.windGust || 0 });
 
         precipChart.data.datasets[0].data.push({ x: time, y: obs.metric.precipTotal });
 	precipChart.data.datasets[1].data.push({ x: time, y: obs.metric.precipRate });
 
-	solarChart.data.datasets[0].data.push({ x: time, y: obs.solarRadiationHigh });
+	solarChart.data.datasets[0].data.push({ x: time, y: obs.solarRadiationHigh || obs.solarRadiation || 0 });
     });
 
     const lastObservation = observations.at(-1);
@@ -242,23 +223,26 @@ function updateChart(observations) {
 
     allCharts.forEach(chart => chart.update());
 
-    // calculate next update
+    // calculate next update - only update fast one time if needed
     const timeSinceLastUpdate = new Date().getTime() - lastObservationTime
     const maxTimeBetweenUpdates = 5 * 60 * 1000;
     const minTimeBetweenUpdates = 1 * 60 * 1000;
-    const nextUpdate = Math.max(minTimeBetweenUpdates, Math.min(maxTimeBetweenUpdates, maxTimeBetweenUpdates - timeSinceLastUpdate));
-    console.log("Next Update: " + nextUpdate);
+    var nextUpdate = Math.max(minTimeBetweenUpdates, Math.min(maxTimeBetweenUpdates, maxTimeBetweenUpdates - timeSinceLastUpdate));
+    if (firstUpdate) {
+	nextUpdate = 0; // short circuit first update
+	firstUpdate = false;
+    } else {
+	console.log("Next Update: " + nextUpdate);
+    }
     setTimeout(updateCurrent, nextUpdate);
 }
 
-
 async function fetchData(url) {
-    return await fetch(url)
+    return await fetch(url, {cache: "no-store"})
 	  .then(response => {
               if (!response.ok) {
 		  throw new Error(`HTTP error ${response.status}`);
               }
-
               return response.json();
 	  });
 }
@@ -266,7 +250,6 @@ async function fetchData(url) {
 (async function() {
     const initialData = await fetchData("https://api.weather.com/v2/pws/observations/all/1day" + window.location.search);
     updateChart(initialData.observations);
-
 })();
 
 async function updateCurrent() {
