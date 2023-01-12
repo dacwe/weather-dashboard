@@ -1,5 +1,36 @@
 import Chart from 'chart.js/auto'
 import 'chartjs-adapter-moment';
+import _ from 'lodash';
+
+const DEFAULT_OPTIONS = {
+    plugins: {
+	title: {
+	    text: "???",
+	    display: true
+	}
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+	y: {
+	    beginAtZero: true,
+	    grid: {
+		display: true,
+		color: "rgba(255,255,255,0.1)"
+	    },
+	    afterFit(scale) {
+		scale.width = 60;
+	    },
+	},
+	xAxis: {
+	    type: "time"
+	}
+    },
+    interaction: {
+        intersect: false,
+        mode: 'index',
+    }
+};
 
 const tempChart = new Chart(
     document.getElementById('temp'),
@@ -9,42 +40,25 @@ const tempChart = new Chart(
 	    datasets: [
 		{
                     label: "Average",
+		    borderWidth: 1.5,
 		    pointStyle: false,
                     borderColor: 'rgba(55, 173, 221, 1.0)',
+                    backgroundColor: 'rgba(55, 173, 221,  0.6)',
 		    cubicInterpolationMode: 'monotone',
                     data: []
                 },
 		{
                     label: "Windchill",
+		    borderWidth: 1.5,
 		    pointStyle: false,
-                    borderColor: 'rgba(221, 173, 23, 0.5)',
+                    borderColor: 'rgba(221, 173, 23,  0.6)',
+		    backgroundColor: 'rgba(221, 173, 23,  0.6)',
 		    cubicInterpolationMode: 'monotone',
                     data: []
                 },
 	    ]
 	},
-	options: {
-	    plugins: {
-		title: {
-		    text: "Temperature",
-		    display: true
-		}
-	    },
-	    responsive: true,
-	    maintainAspectRatio: false,
-	    scales: {
-		y: {
-		    beginAtZero: true,
-		    grid: {
-			display: true,
-			color: "rgba(255,255,255,0.1)"
-		    }
-		},
-		xAxis: {
-		    type: "time"
-		}
-	    }
-	}
+	options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Temperature")
     }
 );
     
@@ -56,6 +70,7 @@ const windChart = new Chart(
 	    datasets: [
 		{
                     label: "Average",
+		    borderWidth: 1.5,
 		    pointStyle: false,
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
                     borderColor: 'rgba(55, 173, 221, 1.0)',
@@ -64,6 +79,8 @@ const windChart = new Chart(
                 },
 		{
                     label: "Gust",
+		    borderWidth: 1.5,
+		    pointRadius: 1,
 		    pointStyle: false,
 		    showLine: false,
 		    pointStyle: 'rect',
@@ -73,31 +90,31 @@ const windChart = new Chart(
                 },
 	    ]
 	},
-	options: {
-	    plugins: {
-		title: {
-		    text: "Wind speed",
-		    display: true
-		}
-	    },
-	    responsive: true,
-	    maintainAspectRatio: false,
-	    scales: {
-		y: {
-		    beginAtZero: true,
-		    grid: {
-			display: true,
-			color: "rgba(255,255,255,0.1)"
-		    }
-		},
-		xAxis: {
-		    type: "time"
-		}
-	    }
-	}
+	options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Windspeed")
     }
 );
-    
+
+const pressureChart = new Chart(
+    document.getElementById('pressure'),
+    {
+	type: 'line',
+	data: {
+	    datasets: [
+		{
+                    label: "Pressure",
+		    borderWidth: 1.5,
+		    pointStyle: false,
+		    showLine: true,
+                    backgroundColor: 'rgba(55, 173, 221,  0.6)',
+                    borderColor: 'rgba(55, 173, 221, 1.0)',
+                    data: []
+                },
+	    ]
+	},
+	options: _.set(_.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Pressure"), "scales.y.beginAtZero", false)
+    }
+);
+
 const precipChart = new Chart(
     document.getElementById('precip'),
     {
@@ -105,7 +122,8 @@ const precipChart = new Chart(
 	data: {
 	    datasets: [
 		{
-                    label: "Precip total",
+                    label: "Total",
+		    borderWidth: 1.5,
 		    pointStyle: false,
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
                     borderColor: 'rgba(55, 173, 221, 1.0)',
@@ -114,35 +132,14 @@ const precipChart = new Chart(
                 },
 		{
 		    type: 'bar',
-                    label: "Precip rate",
+                    label: "Rate",
                     borderColor: 'rgba(221, 173, 23,  0.6)',
 		    backgroundColor: 'rgba(221, 173, 23,  0.6)',
                     data: []
                 },
 	    ]
 	},
-	options: {
-	    plugins: {
-		title: {
-		    text: "Precip",
-		    display: true
-		}
-	    },
-	    responsive: true,
-	    maintainAspectRatio: false,
-	    scales: {
-		y: {
-		    beginAtZero: true,
-		    grid: {
-			display: true,
-			color: "rgba(255,255,255,0.1)"
-		    }
-		},
-		xAxis: {
-		    type: "time"
-		}
-	    }
-	}
+	options: _.set(_.cloneDeep(DEFAULT_OPTIONS) ,"plugins.title.text", "Precipitation")
     }
 );
 
@@ -154,6 +151,7 @@ const solarChart = new Chart(
 	data: {
 	    datasets: [
 		{
+		    borderWidth: 1.5,
                     label: "watts/m²",
 		    pointStyle: false,
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
@@ -163,52 +161,41 @@ const solarChart = new Chart(
                 },
 	    ]
 	},
-	options: {
-	    plugins: {
-		title: {
-		    text: "Solar Radiation",
-		    display: true
-		}
-	    },
-	    responsive: true,
-	    maintainAspectRatio: false,
-	    scales: {
-		y: {
-		    beginAtZero: true,
-		    grid: {
-			display: true,
-			color: "rgba(255,255,255,0.1)"
-		    }
-		},
-		xAxis: {
-		    type: "time"
-		}
-	    }
-	}
+	options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Solar Radiation")
     }
 );
 
-const allCharts = [tempChart, windChart, precipChart, solarChart];
+const allCharts = [tempChart, windChart, pressureChart, precipChart, solarChart];
 
-var firstUpdate = true;
+async function updateChart() {
 
-function updateChart(observations) {
-    
+    const data = await fetchData("https://api.weather.com/v2/pws/observations/all/1day" + window.location.search);
+    const observations = data.observations;
     console.log(observations);
 
+    // remove all old observations that overlap
+    const firstNewObservationTime = new Date(observations.at(0).obsTimeUtc).getTime();
+    allCharts.forEach(chart => {
+	chart.data.datasets.forEach(dataset => {
+	    dataset.data = dataset.data.filter(obs => obs.x.getTime() < firstNewObservationTime);
+	});
+    });
+    
     // adds new observations
     observations.map(obs => {
 	const time = new Date(obs.obsTimeUtc)
-	tempChart.data.datasets[0].data.push({ x: time, y: obs.metric.tempAvg || obs.metric.temp || 0 });
-	tempChart.data.datasets[1].data.push({ x: time, y: obs.metric.windchillAvg || obs.metric.windChill || 0 });
+	tempChart.data.datasets[0].data.push({ x: time, y: obs.metric.tempAvg });
+	tempChart.data.datasets[1].data.push({ x: time, y: obs.metric.windchillAvg });
 
-	windChart.data.datasets[0].data.push({ x: time, y: obs.metric.windspeedAvg || obs.metric.windSpeed || 0});
-	windChart.data.datasets[1].data.push({ x: time, y: obs.metric.windgustAvg || obs.metric.windGust || 0 });
+	windChart.data.datasets[0].data.push({ x: time, y: obs.metric.windspeedAvg });
+	windChart.data.datasets[1].data.push({ x: time, y: obs.metric.windgustAvg });
+
+	pressureChart.data.datasets[0].data.push({ x: time, y: obs.metric.pressureMin + (obs.metric.pressureMax - obs.metric.pressureMin) / 2 });
 
         precipChart.data.datasets[0].data.push({ x: time, y: obs.metric.precipTotal });
 	precipChart.data.datasets[1].data.push({ x: time, y: obs.metric.precipRate });
 
-	solarChart.data.datasets[0].data.push({ x: time, y: obs.solarRadiationHigh || obs.solarRadiation || 0 });
+	solarChart.data.datasets[0].data.push({ x: time, y: obs.solarRadiationHigh });
     });
 
     const lastObservation = observations.at(-1);
@@ -222,19 +209,6 @@ function updateChart(observations) {
     });
 
     allCharts.forEach(chart => chart.update());
-
-    // calculate next update - only update fast one time if needed
-    const timeSinceLastUpdate = new Date().getTime() - lastObservationTime
-    const maxTimeBetweenUpdates = 5 * 60 * 1000;
-    const minTimeBetweenUpdates = 1 * 60 * 1000;
-    var nextUpdate = Math.max(minTimeBetweenUpdates, Math.min(maxTimeBetweenUpdates, maxTimeBetweenUpdates - timeSinceLastUpdate));
-    if (firstUpdate) {
-	nextUpdate = 0; // short circuit first update
-	firstUpdate = false;
-    } else {
-	console.log("Next Update: " + nextUpdate);
-    }
-    setTimeout(updateCurrent, nextUpdate);
 }
 
 async function fetchData(url) {
@@ -247,13 +221,6 @@ async function fetchData(url) {
 	  });
 }
 
-(async function() {
-    const initialData = await fetchData("https://api.weather.com/v2/pws/observations/all/1day" + window.location.search);
-    updateChart(initialData.observations);
-})();
-
-async function updateCurrent() {
-    const data = await fetchData("https://api.weather.com/v2/pws/observations/current" + window.location.search);
-    updateChart(data.observations);
-}
+updateChart();
+setInterval(updateChart, 5 * 60 * 1000);
 
