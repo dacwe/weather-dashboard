@@ -1,6 +1,49 @@
-import Chart from 'chart.js/auto'
+import Chart from 'chart.js/auto';
 import 'chartjs-adapter-moment';
 import _ from 'lodash';
+
+
+const defaultTypes = "temp,wind,pressure,precip,solar";
+
+let pos = defaultTypes;
+if (window.location.hash.startsWith("#")) {
+    pos = window.location.hash.substring(1);
+}
+
+let tempEl = null;
+let windEl = null;
+let pressureEl = null;
+let precipEl = null;
+let solarEl = null;
+
+const posArray = pos.split(",");
+posArray.forEach((type, index) => {
+    console.log(type + " " + index);
+    switch (type) {
+    case "temp":     tempEl     = document.getElementById("pos" + index); break;
+    case "wind":     windEl     = document.getElementById("pos" + index); break;
+    case "pressure": pressureEl = document.getElementById("pos" + index); break;
+    case "precip":   precipEl   = document.getElementById("pos" + index); break;
+    case "solar":    solarEl    = document.getElementById("pos" + index); break;
+    }
+});
+
+let next = posArray.length;
+
+defaultTypes.split(",").forEach((type, index) => {
+    switch (type) {
+    case "temp":     if (!tempEl)     { tempEl     = document.getElementById("pos" + next++); } break;
+    case "wind":     if (!windEl)     { windEl     = document.getElementById("pos" + next++); } break;
+    case "pressure": if (!pressureEl) { pressureEl = document.getElementById("pos" + next++); } break;
+    case "precip":   if (!precipEl)   { precipEl   = document.getElementById("pos" + next++); } break;
+    case "solar":    if (!solarEl)    { solarEl    = document.getElementById("pos" + next++); } break;
+    }
+});
+
+for (var i = posArray.length; i < defaultTypes.split(",").length; i++) {
+    document.getElementById("pos" + i).style.display = 'none';
+}
+
 
 const DEFAULT_OPTIONS = {
     plugins: {
@@ -19,7 +62,7 @@ const DEFAULT_OPTIONS = {
 		color: "rgba(255,255,255,0.1)"
 	    },
 	    afterFit(scale) {
-		scale.width = 60;
+		scale.width = 40;
 	    },
 	},
 	xAxis: {
@@ -32,8 +75,9 @@ const DEFAULT_OPTIONS = {
     }
 };
 
+
 const tempChart = new Chart(
-    document.getElementById('temp'),
+    tempEl,
     {
 	type: 'line',
 	data: {
@@ -61,9 +105,9 @@ const tempChart = new Chart(
 	options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Temperature")
     }
 );
-    
+
 const windChart = new Chart(
-    document.getElementById('wind'),
+    windEl,
     {
 	type: 'line',
 	data: {
@@ -95,7 +139,7 @@ const windChart = new Chart(
 );
 
 const pressureChart = new Chart(
-    document.getElementById('pressure'),
+    pressureEl,
     {
 	type: 'line',
 	data: {
@@ -116,7 +160,7 @@ const pressureChart = new Chart(
 );
 
 const precipChart = new Chart(
-    document.getElementById('precip'),
+    precipEl,
     {
 	type: 'line',
 	data: {
@@ -145,7 +189,7 @@ const precipChart = new Chart(
 
 
 const solarChart = new Chart(
-    document.getElementById('solar'),
+    solarEl,
     {
 	type: 'line',
 	data: {
@@ -224,3 +268,6 @@ async function fetchData(url) {
 updateChart();
 setInterval(updateChart, 5 * 60 * 1000);
 
+
+
+    
