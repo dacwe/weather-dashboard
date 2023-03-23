@@ -62,7 +62,7 @@ const DEFAULT_OPTIONS = {
 		color: "rgba(255,255,255,0.1)"
 	    },
 	    afterFit(scale) {
-		scale.width = 40;
+		scale.width = 50;
 	    },
 	},
 	xAxis: {
