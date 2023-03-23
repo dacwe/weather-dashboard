@@ -47,27 +47,28 @@ for (var i = posArray.length; i < defaultTypes.split(",").length; i++) {
 
 const DEFAULT_OPTIONS = {
     plugins: {
-	title: {
-	    text: "???",
-	    display: true
-	}
+        title: {
+            text: "???",
+            display: true,
+            align: 'end'
+        }
     },
     responsive: true,
     maintainAspectRatio: false,
     scales: {
-	y: {
-	    beginAtZero: true,
-	    grid: {
-		display: true,
-		color: "rgba(255,255,255,0.1)"
-	    },
-	    afterFit(scale) {
-		scale.width = 50;
-	    },
-	},
-	xAxis: {
-	    type: "time"
-	}
+        y: {
+            beginAtZero: true,
+            grid: {
+                display: true,
+                color: "rgba(255,255,255,0.1)"
+            },
+            afterFit(scale) {
+                scale.width = 50;
+            },
+        },
+        xAxis: {
+            type: "time"
+        }
     },
     interaction: {
         intersect: false,
@@ -79,111 +80,111 @@ const DEFAULT_OPTIONS = {
 const tempChart = new Chart(
     tempEl,
     {
-	type: 'line',
-	data: {
-	    datasets: [
-		{
+        type: 'line',
+        data: {
+            datasets: [
+                {
                     label: "Average",
-		    borderWidth: 1.5,
-		    pointStyle: false,
+                    borderWidth: 1.5,
+                    pointStyle: false,
                     borderColor: 'rgba(55, 173, 221, 1.0)',
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
-		    cubicInterpolationMode: 'monotone',
+                    cubicInterpolationMode: 'monotone',
                     data: []
                 },
-		{
+                {
                     label: "Windchill",
-		    borderWidth: 1.5,
-		    pointStyle: false,
+                    borderWidth: 1.5,
+                    pointStyle: false,
                     borderColor: 'rgba(221, 173, 23,  0.6)',
-		    backgroundColor: 'rgba(221, 173, 23,  0.6)',
-		    cubicInterpolationMode: 'monotone',
+                    backgroundColor: 'rgba(221, 173, 23,  0.6)',
+                    cubicInterpolationMode: 'monotone',
                     data: []
                 },
-	    ]
-	},
-	options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Temperature")
+            ]
+        },
+        options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Temperature")
     }
 );
 
 const windChart = new Chart(
     windEl,
     {
-	type: 'line',
-	data: {
-	    datasets: [
-		{
+        type: 'line',
+        data: {
+            datasets: [
+                {
                     label: "Average",
-		    borderWidth: 1.5,
-		    pointStyle: false,
+                    borderWidth: 1.5,
+                    pointStyle: false,
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
                     borderColor: 'rgba(55, 173, 221, 1.0)',
-		    cubicInterpolationMode: 'monotone',
+                    cubicInterpolationMode: 'monotone',
                     data: []
                 },
-		{
+                {
                     label: "Gust",
-		    borderWidth: 1.5,
-		    pointRadius: 1,
-		    pointStyle: false,
-		    showLine: false,
-		    pointStyle: 'rect',
+                    borderWidth: 1.5,
+                    pointRadius: 1,
+                    pointStyle: false,
+                    showLine: false,
+                    pointStyle: 'rect',
                     borderColor: 'rgba(221, 173, 23,  0.6)',
-		    backgroundColor: 'rgba(221, 173, 23,  0.6)',
+                    backgroundColor: 'rgba(221, 173, 23,  0.6)',
                     data: []
                 },
-	    ]
-	},
-	options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Windspeed")
+            ]
+        },
+        options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Windspeed")
     }
 );
 
 const pressureChart = new Chart(
     pressureEl,
     {
-	type: 'line',
-	data: {
-	    datasets: [
-		{
+        type: 'line',
+        data: {
+            datasets: [
+                {
                     label: "Pressure",
-		    borderWidth: 1.5,
-		    pointStyle: false,
-		    showLine: true,
+                    borderWidth: 1.5,
+                    pointStyle: false,
+                    showLine: true,
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
                     borderColor: 'rgba(55, 173, 221, 1.0)',
                     data: []
                 },
-	    ]
-	},
-	options: _.set(_.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Pressure"), "scales.y.beginAtZero", false)
+            ]
+        },
+        options: _.set(_.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Pressure"), "scales.y.beginAtZero", false)
     }
 );
 
 const precipChart = new Chart(
     precipEl,
     {
-	type: 'line',
-	data: {
-	    datasets: [
-		{
+        type: 'line',
+        data: {
+            datasets: [
+                {
                     label: "Total",
-		    borderWidth: 1.5,
-		    pointStyle: false,
+                    borderWidth: 1.5,
+                    pointStyle: false,
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
                     borderColor: 'rgba(55, 173, 221, 1.0)',
-		    cubicInterpolationMode: 'monotone',
+                    cubicInterpolationMode: 'monotone',
                     data: []
                 },
-		{
-		    type: 'bar',
+                {
+                    type: 'bar',
                     label: "Rate",
                     borderColor: 'rgba(221, 173, 23,  0.6)',
-		    backgroundColor: 'rgba(221, 173, 23,  0.6)',
+                    backgroundColor: 'rgba(221, 173, 23,  0.6)',
                     data: []
                 },
-	    ]
-	},
-	options: _.set(_.cloneDeep(DEFAULT_OPTIONS) ,"plugins.title.text", "Precipitation")
+            ]
+        },
+        options: _.set(_.cloneDeep(DEFAULT_OPTIONS) ,"plugins.title.text", "Precipitation")
     }
 );
 
@@ -191,21 +192,21 @@ const precipChart = new Chart(
 const solarChart = new Chart(
     solarEl,
     {
-	type: 'line',
-	data: {
-	    datasets: [
-		{
-		    borderWidth: 1.5,
+        type: 'line',
+        data: {
+            datasets: [
+                {
+                    borderWidth: 1.5,
                     label: "watts/m²",
-		    pointStyle: false,
+                    pointStyle: false,
                     backgroundColor: 'rgba(55, 173, 221,  0.6)',
                     borderColor: 'rgba(55, 173, 221, 1.0)',
                     cubicInterpolationMode: 'monotone',
-		    data: []
+                    data: []
                 },
-	    ]
-	},
-	options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Solar Radiation")
+            ]
+        },
+        options: _.set(_.cloneDeep(DEFAULT_OPTIONS), "plugins.title.text", "Solar Radiation")
     }
 );
 
@@ -220,26 +221,26 @@ async function updateChart() {
     // remove all old observations that overlap
     const firstNewObservationTime = new Date(observations.at(0).obsTimeUtc).getTime();
     allCharts.forEach(chart => {
-	chart.data.datasets.forEach(dataset => {
-	    dataset.data = dataset.data.filter(obs => obs.x.getTime() < firstNewObservationTime);
-	});
+        chart.data.datasets.forEach(dataset => {
+            dataset.data = dataset.data.filter(obs => obs.x.getTime() < firstNewObservationTime);
+        });
     });
     
     // adds new observations
     observations.map(obs => {
-	const time = new Date(obs.obsTimeUtc)
-	tempChart.data.datasets[0].data.push({ x: time, y: obs.metric.tempAvg });
-	tempChart.data.datasets[1].data.push({ x: time, y: obs.metric.windchillAvg });
+        const time = new Date(obs.obsTimeUtc)
+        tempChart.data.datasets[0].data.push({ x: time, y: obs.metric.tempAvg });
+        tempChart.data.datasets[1].data.push({ x: time, y: obs.metric.windchillAvg });
 
-	windChart.data.datasets[0].data.push({ x: time, y: obs.metric.windspeedAvg });
-	windChart.data.datasets[1].data.push({ x: time, y: obs.metric.windgustAvg });
+        windChart.data.datasets[0].data.push({ x: time, y: obs.metric.windspeedAvg });
+        windChart.data.datasets[1].data.push({ x: time, y: obs.metric.windgustAvg });
 
-	pressureChart.data.datasets[0].data.push({ x: time, y: obs.metric.pressureMin + (obs.metric.pressureMax - obs.metric.pressureMin) / 2 });
+        pressureChart.data.datasets[0].data.push({ x: time, y: obs.metric.pressureMin + (obs.metric.pressureMax - obs.metric.pressureMin) / 2 });
 
         precipChart.data.datasets[0].data.push({ x: time, y: obs.metric.precipTotal });
-	precipChart.data.datasets[1].data.push({ x: time, y: obs.metric.precipRate });
+        precipChart.data.datasets[1].data.push({ x: time, y: obs.metric.precipRate });
 
-	solarChart.data.datasets[0].data.push({ x: time, y: obs.solarRadiationHigh });
+        solarChart.data.datasets[0].data.push({ x: time, y: obs.solarRadiationHigh });
     });
 
     const lastObservation = observations.at(-1);
@@ -247,9 +248,9 @@ async function updateChart() {
     // remove old observations that isn't interesting anymore
     const lastObservationTime = new Date(lastObservation.obsTimeUtc).getTime();
     allCharts.forEach(chart => {
-	chart.data.datasets.forEach(dataset => {
-	    dataset.data = dataset.data.filter(obs => lastObservationTime - obs.x.getTime() <= 24 * 60 * 60 * 1000);
-	});
+        chart.data.datasets.forEach(dataset => {
+            dataset.data = dataset.data.filter(obs => lastObservationTime - obs.x.getTime() <= 24 * 60 * 60 * 1000);
+        });
     });
 
     allCharts.forEach(chart => chart.update());
@@ -257,12 +258,12 @@ async function updateChart() {
 
 async function fetchData(url) {
     return await fetch(url, {cache: "no-store"})
-	  .then(response => {
+          .then(response => {
               if (!response.ok) {
-		  throw new Error(`HTTP error ${response.status}`);
+                  throw new Error(`HTTP error ${response.status}`);
               }
               return response.json();
-	  });
+          });
 }
 
 updateChart();
