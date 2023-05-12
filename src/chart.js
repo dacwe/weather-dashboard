@@ -50,7 +50,7 @@ const DEFAULT_OPTIONS = {
         title: {
             text: "???",
             display: true,
-            align: 'end'
+            align: 'center'
         }
     },
     responsive: true,
@@ -216,7 +216,7 @@ async function updateChart() {
 
     const data = await fetchData("https://api.weather.com/v2/pws/observations/all/1day" + window.location.search);
     const observations = data.observations;
-    console.log(observations);
+    console.log(data);
 
     // remove all old observations that overlap
     const firstNewObservationTime = new Date(observations.at(0).obsTimeUtc).getTime();
@@ -252,6 +252,13 @@ async function updateChart() {
             dataset.data = dataset.data.filter(obs => lastObservationTime - obs.x.getTime() <= 24 * 60 * 60 * 1000);
         });
     });
+
+    
+    tempChart.data.datasets[0].label = "Average " + lastObservation.metric.tempAvg;
+    tempChart.data.datasets[1].label = "Windchill " + lastObservation.metric.windchillAvg;
+
+    windChart.data.datasets[0].label = "Average " + lastObservation.metric.windspeedAvg;
+    windChart.data.datasets[1].label = "Gust " + lastObservation.metric.windgustAvg;
 
     allCharts.forEach(chart => chart.update());
 }
